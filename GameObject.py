@@ -1,6 +1,7 @@
 import pygame
 import random
 
+# this is a test string..
 def snake(snake_list, direction, snake_head_img):
     if direction == "right":
         snake_head_img_rotated = pygame.transform.rotate(snake_head_img, 270)
