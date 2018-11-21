@@ -1,6 +1,7 @@
 import pygame
 import random
 
+# laksjdflasfölkasölkfjaslkfölasdkjf
 # this is a test string..
 def snake(snake_list, direction, snake_head_img):
     if direction == "right":
