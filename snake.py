@@ -1,4 +1,5 @@
 from movableGameObject import MovableGameObject
+from snakeBodyPart import SnakeBodyPart
 
 
 class Snake(MovableGameObject):
@@ -9,7 +10,10 @@ class Snake(MovableGameObject):
         # snake body
         self.thickness = block_size
         self.length = 1
-        self.body_parts = [[self.x_coordinate, self.y_coordinate]]
+        self.body_parts = [SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness)]
+
+    def __len__(self):
+        return self.length
 
     # ########  override  ######## #
     def calculate_new_position(self):
@@ -21,5 +25,18 @@ class Snake(MovableGameObject):
             self.move_up()
         if self.direction == "down":
             self.move_down()
+
+        self.calculate_body()
+
+    def calculate_body(self):
+        self.body_parts.append(SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness))
+
+        if len(self.body_parts) > len(self):
+            del self.body_parts[0]
+
+        # for segment in snake_list[:-1]:
+        #     if segment == snake_head:
+        #         game_over = True
+        #
 
 

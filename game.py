@@ -39,7 +39,7 @@ class Game:
         self.text_font = pygame.font.SysFont(None, 25)
 
         # "initialize" sprites due to readability
-        self.snake_head_sprite = None
+        self.snake_head_sprite = {}
 
         self.start_game()
 
@@ -62,7 +62,6 @@ class Game:
 
             # update window
             self.draw_screen()
-            # todo draw whole snake
             self.draw_apple()
             self.draw_player()
             self.display_player_score()
@@ -83,7 +82,10 @@ class Game:
         self.game_window.blit(text_surface, text_surface.get_rect())
 
     def load_sprites(self):
-        self.snake_head_sprite = pygame.image.load("assets/snake_head.png")
+        self.snake_head_sprite["up"] = pygame.image.load("assets/snake_head.png")
+        self.snake_head_sprite["left"] = pygame.transform.rotate(self.snake_head_sprite["up"], 90)
+        self.snake_head_sprite["down"] = pygame.transform.rotate(self.snake_head_sprite["up"], 180)
+        self.snake_head_sprite["right"] = pygame.transform.rotate(self.snake_head_sprite["up"], 270)
 
     def process_events(self, events):
         for event in events:
@@ -115,13 +117,29 @@ class Game:
         self.snake = Snake([0, self.playfield_width], [50, self.playfield_height + 50], self.block_size, self.block_size)
 
     def draw_player(self):
-        self.game_window.blit(self.snake_head_sprite, [self.snake.get_x_position(), self.snake.get_y_position()])
+        print(self.snake.get_position())
+        if self.snake.direction == "up":
+            self.game_window.blit(self.snake_head_sprite["up"], [self.snake.get_x_position(), self.snake.get_y_position()])
+        elif self.snake.direction == "right":
+            self.game_window.blit(self.snake_head_sprite["right"], [self.snake.get_x_position(), self.snake.get_y_position()])
+        elif self.snake.direction == "down":
+            self.game_window.blit(self.snake_head_sprite["down"], [self.snake.get_x_position(), self.snake.get_y_position()])
+        elif self.snake.direction == "left":
+            self.game_window.blit(self.snake_head_sprite["left"], [self.snake.get_x_position(), self.snake.get_y_position()])
+
+        for snake_body_part in self.snake.body_parts[:-1]:
+            pygame.draw.rect(self.game_window, self.GREEN, snake_body_part.get_position_thickness_thickness())
 
     def check_collisions(self):
         if self.snake.collides_with(self.apple):
+            self.snake.length += 1
             self.apple.is_eaten = True
             self.player_score += 1
             print("{} ate {}".format(str(self.snake), str(self.apple)))
+
+        for body_part in self.snake.body_parts[:-1]:
+            if self.snake.body_parts[-1].get_position() == body_part.get_position():
+                self.game_over = True
 
     def calculate_frame(self):
         self.snake.move()
