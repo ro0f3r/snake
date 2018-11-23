@@ -106,17 +106,16 @@ class Game:
                     self.snake.direction = "down"
 
     def spawn_new_apple(self):
-        self.apple = Apple([0, self.playfield_width], [50, self.playfield_height + 50])
-        print("new " + str(self.apple))
+        self.apple = Apple([0, self.playfield_width], [50, self.playfield_height + 50], self.block_size)
 
     def draw_apple(self):
-        pygame.draw.rect(self.game_window, self.apple_color, self.apple.get_position())
+        pygame.draw.rect(self.game_window, self.apple_color, self.apple.get_position_thickness_thickness())
 
     def spawn_player(self):
-        self.snake = Snake([self.playfield_width], [50, self.playfield_height + 50], self.block_size)
+        self.snake = Snake([0, self.playfield_width], [50, self.playfield_height + 50], self.block_size, self.block_size)
 
     def draw_player(self):
-        self.game_window.blit(self.snake_head_sprite, self.snake.get_position())
+        self.game_window.blit(self.snake_head_sprite, [self.snake.get_x_position(), self.snake.get_y_position()])
 
     def check_collisions(self):
         if self.snake.collides_with(self.apple):
