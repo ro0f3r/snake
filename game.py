@@ -14,7 +14,7 @@ class Game:
     LIGHT_GREY = (211, 211, 211)
 
     def __init__(self):
-        # window related stuff
+        # window related stufff
         self.window_height = 600
         self.window_width = 800
         self.playfield_height = self.window_height - 100
