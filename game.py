@@ -40,6 +40,7 @@ class Game:
 
         # "initialize" sprites due to readability
         self.snake_head_sprite = {}
+        self.snake_body_sprite = None
 
         self.start_game()
 
@@ -87,6 +88,8 @@ class Game:
         self.snake_head_sprite["down"] = pygame.transform.rotate(self.snake_head_sprite["up"], 180)
         self.snake_head_sprite["right"] = pygame.transform.rotate(self.snake_head_sprite["up"], 270)
 
+        self.snake_body_sprite = pygame.image.load("assets/snake_body.png")
+
     def process_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
@@ -128,7 +131,7 @@ class Game:
             self.game_window.blit(self.snake_head_sprite["left"], [self.snake.get_x_position(), self.snake.get_y_position()])
 
         for snake_body_part in self.snake.body_parts[:-1]:
-            pygame.draw.rect(self.game_window, self.GREEN, snake_body_part.get_position_thickness_thickness())
+            self.game_window.blit(self.snake_body_sprite, [snake_body_part.get_x_position(), snake_body_part.get_y_position()])
 
     def check_collisions(self):
         if self.snake.collides_with(self.apple):
