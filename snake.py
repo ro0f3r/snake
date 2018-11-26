@@ -5,7 +5,6 @@ from snakeBodyPart import SnakeBodyPart
 class Snake(MovableGameObject):
     def __init__(self, x_range, y_range, thickness, block_size):
         super().__init__(x_range, y_range, thickness, block_size)
-        self.direction = "up"
 
         # snake body
         self.thickness = block_size

@@ -1,10 +1,10 @@
-from gameObject import GameObject
+from movableGameObject import MovableGameObject
 
 
 # TODO finish implementing
-class SnakeBodyPart(GameObject):
+class SnakeBodyPart(MovableGameObject):
     def __init__(self, x_coordinate, y_coordinate, thickness):
-        super().__init__(x_coordinate, y_coordinate, thickness, inform_about_new_instance=False)
+        super().__init__(x_coordinate, y_coordinate, thickness, thickness, inform_about_new_instance=False)
         self.x_coordinate = x_coordinate
         self.y_coordinate = y_coordinate
 

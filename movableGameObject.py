@@ -2,11 +2,14 @@ from gameObject import GameObject
 
 
 class MovableGameObject(GameObject):
-    def __init__(self, x_range, y_range, thickness, block_size):
+    def __init__(self, x_range, y_range, thickness, block_size, inform_about_new_instance=False):
         self.block_size = block_size
         self.window_width = x_range
         self.window_height = y_range
-        super().__init__(x_range, y_range, thickness)
+        self.direction = "up"
+        super().__init__(x_range, y_range, thickness, inform_about_new_instance=inform_about_new_instance)
+        if inform_about_new_instance:
+            print(self)
 
     # ########  override  ######## #
     def get_new_x(self):
@@ -70,3 +73,9 @@ class MovableGameObject(GameObject):
                 return True
         else:
             return False
+
+    def get_direction(self):
+        return self.direction
+
+    def set_direction(self, new_direction):
+        self.direction = new_direction
