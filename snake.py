@@ -8,8 +8,9 @@ class Snake(MovableGameObject):
 
         # snake body
         self.thickness = block_size
-        self.length = 1
-        self.body_parts = [SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness)]
+        self.length = 0
+        self.head = SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness, self.direction)
+        self.body_parts = []
 
     def __len__(self):
         return self.length
@@ -28,10 +29,31 @@ class Snake(MovableGameObject):
         self.calculate_body()
 
     def calculate_body(self):
-        self.body_parts.append(SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness))
+        self.body_parts.append(self.head)
+
+        self.head = SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness, self.direction)
+
+        new_body_parts = []
+
+        for i in range(len(self.body_parts)):
+            try:
+                if self.body_parts[i].get_direction() == "right" and self.body_parts[i + 1].get_direction() == "down":
+                    new_body_parts.append(SnakeBodyPart(self.body_parts[i + 1].get_x_position(), self.body_parts[i + 1].get_y_position(), self.get_thickness(), "right-down"))
+                    print("YES")
+                else:
+                    new_body_parts.append(SnakeBodyPart(self.body_parts[i + 1].get_x_position(), self.body_parts[i + 1].get_y_position(), self.get_thickness(), self.body_parts[i + 1].get_direction()))
+
+            except IndexError:
+                new_body_parts.append(SnakeBodyPart(self.head.get_x_position(), self.head.get_y_position(), self.get_thickness(), self.head.get_direction()))
 
         if len(self.body_parts) > len(self):
             del self.body_parts[0]
+
+    def get_head(self):
+        return self.head
+
+    def get_body_parts(self):
+        return self.body_parts
 
         # for segment in snake_list[:-1]:
         #     if segment == snake_head:
