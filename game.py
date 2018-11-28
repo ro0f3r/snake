@@ -23,7 +23,7 @@ class Game:
         self.hud_color = self.BLACK
 
         # game related stuff
-        self.fps = 15
+        self.fps = 10
         self.block_size = 20
         self.player_score = 0
         self.game_over = False
@@ -96,7 +96,16 @@ class Game:
         self.snake_body_sprite["right"] = pygame.transform.rotate(self.snake_body_sprite["up"], 270)
 
         self.snake_body_sprite["right-down"] = pygame.image.load("assets/snake_body_turn.png")
-        # self.snake_body_sprite["up-right"] =
+        self.snake_body_sprite["up-left"] = self.snake_body_sprite["right-down"]
+
+        self.snake_body_sprite["left-down"] = pygame.transform.rotate(self.snake_body_sprite["right-down"], 90)
+        self.snake_body_sprite["up-right"] = self.snake_body_sprite["left-down"]
+
+        self.snake_body_sprite["left-up"] = pygame.transform.rotate(self.snake_body_sprite["right-down"], 180)
+        self.snake_body_sprite["down-right"] = self.snake_body_sprite["left-up"]
+
+        self.snake_body_sprite["right-up"] = pygame.transform.rotate(self.snake_body_sprite["right-down"], 270)
+        self.snake_body_sprite["down-left"] = self.snake_body_sprite["right-up"]
 
     def process_events(self, events):
         for event in events:
@@ -137,33 +146,38 @@ class Game:
         elif self.snake.head.get_direction() == "left":
             self.game_window.blit(self.snake_head_sprite["left"], self.snake.head.get_position())
 
-        print(self.snake.get_position())
-
-#      for snake_body_part in self.snake.get_body_parts():
-#          if snake_body_part.get_direction() == "up":
-#              self.game_window.blit(self.snake_body_sprite["up"], snake_body_part.get_position())
-#          elif snake_body_part.get_direction() == "left":
-#              self.game_window.blit(self.snake_body_sprite["left"], snake_body_part.get_position())
-#          elif snake_body_part.get_direction() == "down":
-#              self.game_window.blit(self.snake_body_sprite["down"], snake_body_part.get_position())
-#          elif snake_body_part.get_direction() == "right":
-#              self.game_window.blit(self.snake_body_sprite["right"], snake_body_part.get_position())
-#          elif snake_body_part.get_direction() == "right-down":
-#              print("HELLO")
-#              self.game_window.blit(self.snake_body_sprite["right-down"], snake_body_part.get_position())#
-
         for i in range(len(list(reversed(self.snake.body_parts)))):
             try:
-                if (self.snake.body_parts[i].get_direction() == "right" and self.snake.body_parts[i + 1].get_direction() == "down") or (self.snake.body_parts[i].get_direction() == "up" and self.snake.body_parts[i + 1].get_direction == "left"):
-                    self.game_window.blit(self.snake_body_sprite["right-down"], self.snake.body_parts[i + 1].get_position())
-                else:
-                    if self.snake.body_parts[i].get_direction() == "up":
+                if self.snake.body_parts[i].get_direction() == "up":
+                    if self.snake.body_parts[i + 1].get_direction() == "left":
+                        self.game_window.blit(self.snake_body_sprite["up-left"], self.snake.body_parts[i + 1].get_position())
+                    elif self.snake.body_parts[i + 1].get_direction() == "right":
+                        self.game_window.blit(self.snake_body_sprite["up-right"], self.snake.body_parts[i + 1].get_position())
+                    else:
                         self.game_window.blit(self.snake_body_sprite["up"], self.snake.body_parts[i + 1].get_position())
-                    elif self.snake.body_parts[i].get_direction() == "left":
+
+                elif self.snake.body_parts[i].get_direction() == "left":
+                    if self.snake.body_parts[i + 1].get_direction() == "down":
+                        self.game_window.blit(self.snake_body_sprite["left-down"], self.snake.body_parts[i + 1].get_position())
+                    elif self.snake.body_parts[i + 1].get_direction() == "up":
+                        self.game_window.blit(self.snake_body_sprite["left-up"], self.snake.body_parts[i + 1].get_position())
+                    else:
                         self.game_window.blit(self.snake_body_sprite["left"], self.snake.body_parts[i + 1].get_position())
-                    elif self.snake.body_parts[i].get_direction() == "down":
+
+                elif self.snake.body_parts[i].get_direction() == "down":
+                    if self.snake.body_parts[i + 1].get_direction() == "right":
+                        self.game_window.blit(self.snake_body_sprite["down-right"], self.snake.body_parts[i + 1].get_position())
+                    elif self.snake.body_parts[i + 1].get_direction() == "left":
+                        self.game_window.blit(self.snake_body_sprite["down-left"], self.snake.body_parts[i + 1].get_position())
+                    else:
                         self.game_window.blit(self.snake_body_sprite["down"], self.snake.body_parts[i + 1].get_position())
-                    elif self.snake.body_parts[i].get_direction() == "right":
+
+                elif self.snake.body_parts[i].get_direction() == "right":
+                    if self.snake.body_parts[i + 1].get_direction() == "down":
+                        self.game_window.blit(self.snake_body_sprite["right-down"], self.snake.body_parts[i + 1].get_position())
+                    elif self.snake.body_parts[i + 1].get_direction() == "up":
+                        self.game_window.blit(self.snake_body_sprite["right-up"], self.snake.body_parts[i + 1].get_position())
+                    else:
                         self.game_window.blit(self.snake_body_sprite["right"], self.snake.body_parts[i + 1].get_position())
             except IndexError:
                 pass
