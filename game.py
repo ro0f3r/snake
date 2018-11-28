@@ -127,13 +127,13 @@ class Game:
         self.snake = Snake([0, self.playfield_width], [50, self.playfield_height + 50], self.block_size, self.block_size)
 
     def draw_player(self):
-        if self.snake.get_direction() == "up":
+        if self.snake.head.get_direction() == "up":
             self.game_window.blit(self.snake_head_sprite["up"], self.snake.head.get_position())
-        elif self.snake.get_direction() == "right":
+        elif self.snake.head.get_direction() == "right":
             self.game_window.blit(self.snake_head_sprite["right"], self.snake.head.get_position())
-        elif self.snake.get_direction() == "down":
+        elif self.snake.head.get_direction() == "down":
             self.game_window.blit(self.snake_head_sprite["down"], self.snake.head.get_position())
-        elif self.snake.get_direction() == "left":
+        elif self.snake.head.get_direction() == "left":
             self.game_window.blit(self.snake_head_sprite["left"], self.snake.head.get_position())
 
         for snake_body_part in self.snake.get_body_parts():
