@@ -8,7 +8,7 @@ class Snake(MovableGameObject):
 
         # snake body
         self.thickness = block_size
-        self.length = 0
+        self.length = 1
         self.head = SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness, self.direction)
         self.body_parts = []
 
@@ -17,13 +17,13 @@ class Snake(MovableGameObject):
 
     # ########  override  ######## #
     def calculate_new_position(self):
-        if self.direction == "left":
+        if self.head.direction == "left":
             self.move_left()
-        if self.direction == "right":
+        if self.head.direction == "right":
             self.move_right()
-        if self.direction == "up":
+        if self.head.direction == "up":
             self.move_up()
-        if self.direction == "down":
+        if self.head.direction == "down":
             self.move_down()
 
         self.calculate_body()
@@ -31,21 +31,7 @@ class Snake(MovableGameObject):
     def calculate_body(self):
         self.body_parts.append(self.head)
 
-        self.head = SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness, self.direction)
-
-        new_body_parts = []
-
-        for i in range(len(self.body_parts)):
-            try:
-                if self.body_parts[i].get_direction() == "right" and self.body_parts[i + 1].get_direction() == "down":
-                    new_body_parts.append(SnakeBodyPart(self.body_parts[i + 1].get_x_position(), self.body_parts[i + 1].get_y_position(), self.get_thickness(), "right-down"))
-                else:
-                    new_body_parts.append(SnakeBodyPart(self.body_parts[i + 1].get_x_position(), self.body_parts[i + 1].get_y_position(), self.get_thickness(), self.body_parts[i + 1].get_direction()))
-            except IndexError:
-                if self.body_parts[i].get_direction() == "right" and self.head.get_direction() == "down":
-                    new_body_parts.append(SnakeBodyPart(self.head.get_x_position(), self.head.get_y_position(), self.get_thickness(), "right-down"))
-                else:
-                    new_body_parts.append(SnakeBodyPart(self.head.get_x_position(), self.head.get_y_position(), self.get_thickness(), self.body_parts[i].get_direction()))
+        self.head = SnakeBodyPart(self.x_coordinate, self.y_coordinate, self.thickness, self.head.direction)
 
         if len(self.body_parts) > len(self):
             del self.body_parts[0]
