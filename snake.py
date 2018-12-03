@@ -26,6 +26,8 @@ class Snake(MovableGameObject):
         if self.head.direction == "down":
             self.move_down()
 
+        self.check_boundaries()
+
         self.calculate_body()
 
     def calculate_body(self):
@@ -35,9 +37,6 @@ class Snake(MovableGameObject):
 
         if len(self.body_parts) > len(self):
             del self.body_parts[0]
-
-        for part in self.body_parts:
-            print(part.get_direction())
 
     def get_head(self):
         return self.head

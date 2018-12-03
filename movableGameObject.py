@@ -31,7 +31,6 @@ class MovableGameObject(GameObject):
 
     def move(self):
         self.calculate_new_position()
-        self.check_boundaries()
 
     def calculate_new_position(self):
         pass
@@ -51,15 +50,19 @@ class MovableGameObject(GameObject):
     def check_boundaries(self):
         # snake goes through right screen border
         if self.x_coordinate >= self.window_width[1]:
+            print(self.x_coordinate, " - window width: ", self.window_width)
             self.x_coordinate = self.window_width[0]
         # snake goes through left screen border
         if self.x_coordinate < self.window_width[0]:
+            print(self.x_coordinate, " - window width: ", self.window_width)
             self.x_coordinate = self.window_width[1]
         # snake goes through bottom border
         if self.y_coordinate >= self.window_height[1]:
+            print(self.y_coordinate, " - window height: ", self.window_height)
             self.y_coordinate = self.window_height[0]
         # snake goes through top border
         if self.y_coordinate < self.window_height[0]:
+            print(self.y_coordinate, " - window height: ", self.window_height)
             self.y_coordinate = self.window_height[1] - self.thickness
 
     def collides_with(self, other):
