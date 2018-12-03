@@ -26,6 +26,7 @@ class Game:
         self.fps = 10
         self.block_size = 20
         self.player_score = 0
+        self.player_name = "Oli"
         self.game_over = False
         self.apple = None
         self.snake = None
@@ -39,6 +40,7 @@ class Game:
         self.text_font = pygame.font.SysFont(None, 25)
 
         # "initialize" sprites due to readability
+        self.apple_sprite = None
         self.snake_head_sprite = {}
         self.snake_body_sprite = {}
 
@@ -66,6 +68,7 @@ class Game:
             self.draw_apple()
             self.draw_player()
             self.display_player_score()
+            self.display_player_name()
             pygame.display.update()
             self.game_clock.tick(self.fps)
 
@@ -74,7 +77,7 @@ class Game:
 
     def draw_screen(self):
         self.game_window.fill(self.hud_color)
-        pygame.draw.rect(self.game_window, self.LIGHT_GREY, [0, 50, self.playfield_width, self.playfield_height])
+        pygame.draw.rect(self.game_window, self.WHITE, [0, 50, self.playfield_width, self.playfield_height])
 
     def display_player_score(self):
         score_string = "Score: " + str(self.player_score)
@@ -82,7 +85,15 @@ class Game:
         # text_surface.get_rect().center = (self.window_width / 2), 10
         self.game_window.blit(text_surface, text_surface.get_rect())
 
+    def display_player_name(self):
+        name_string = "Name: " + str(self.player_name)
+        text_surface = self.text_font.render(name_string, True, self.WHITE)
+        self.game_window.blit(text_surface, (self.window_width - text_surface.get_width(), 0))
+
     def load_sprites(self):
+        # initialize apple sprite
+        self.apple_sprite = pygame.image.load("assets/apple.png")
+
         # initialize all snake head sprites
         self.snake_head_sprite["up"] = pygame.image.load("assets/snake_head.png")
         self.snake_head_sprite["left"] = pygame.transform.rotate(self.snake_head_sprite["up"], 90)
@@ -131,7 +142,7 @@ class Game:
         self.apple = Apple([0, self.playfield_width], [50, self.playfield_height + 50], self.block_size)
 
     def draw_apple(self):
-        pygame.draw.rect(self.game_window, self.apple_color, self.apple.get_position_thickness_thickness())
+        self.game_window.blit(self.apple_sprite, self.apple.get_position_thickness_thickness())
 
     def spawn_player(self):
         self.snake = Snake([0, self.playfield_width], [50, self.playfield_height + 50], self.block_size, self.block_size)
