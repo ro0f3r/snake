@@ -26,7 +26,7 @@ class Game:
         self.fps = 10
         self.block_size = 20
         self.player_score = 0
-        self.player_name = "Oli"
+        self.player_name = "HANSPETER_ÜÄÖ"
         self.game_over = False
         self.apple = None
         self.snake = None
