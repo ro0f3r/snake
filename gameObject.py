@@ -26,7 +26,7 @@ class GameObject:
 
     @staticmethod
     def get_new_position_from_range(axis_range, thickness):
-        return random.randrange(axis_range[0], axis_range[1] - thickness) // thickness * thickness
+        return (random.randrange(axis_range[0], axis_range[1] - thickness) // thickness) * thickness
 
     def get_thickness(self):
         return self.thickness
