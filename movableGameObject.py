@@ -22,10 +22,10 @@ class MovableGameObject(GameObject):
     @staticmethod
     def get_middle_of_range_by_block_size(axis_range, block_size):
         if isinstance(axis_range, int):
-            return axis_range // (2 * block_size) * block_size
+            return (axis_range // (2 * block_size)) * block_size
         # TODO implement middle of range
         elif len(axis_range) == 2:
-            return (axis_range[0] + axis_range[1]) // (2 * block_size) * block_size
+            return ((axis_range[0] + axis_range[1]) // (2 * block_size)) * block_size
         else:
             return 0
 
