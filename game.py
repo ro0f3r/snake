@@ -92,21 +92,21 @@ class Game:
 
     def load_sprites(self):
         # initialize apple sprite
-        self.apple_sprite = pygame.image.load("assets/apple.png")
+        self.apple_sprite = pygame.image.load("sprites/apple.png")
 
         # initialize all snake head sprites
-        self.snake_head_sprite["up"] = pygame.image.load("assets/snake_head.png")
+        self.snake_head_sprite["up"] = pygame.image.load("sprites/snake_head.png")
         self.snake_head_sprite["left"] = pygame.transform.rotate(self.snake_head_sprite["up"], 90)
         self.snake_head_sprite["down"] = pygame.transform.rotate(self.snake_head_sprite["up"], 180)
         self.snake_head_sprite["right"] = pygame.transform.rotate(self.snake_head_sprite["up"], 270)
 
         # initialize all snake body sprites
-        self.snake_body_sprite["up"] = pygame.image.load("assets/snake_body.png")
+        self.snake_body_sprite["up"] = pygame.image.load("sprites/snake_body.png")
         self.snake_body_sprite["left"] = pygame.transform.rotate(self.snake_body_sprite["up"], 90)
         self.snake_body_sprite["down"] = pygame.transform.rotate(self.snake_body_sprite["up"], 180)
         self.snake_body_sprite["right"] = pygame.transform.rotate(self.snake_body_sprite["up"], 270)
 
-        self.snake_body_sprite["right-down"] = pygame.image.load("assets/snake_body_turn.png")
+        self.snake_body_sprite["right-down"] = pygame.image.load("sprites/snake_body_turn.png")
         self.snake_body_sprite["up-left"] = self.snake_body_sprite["right-down"]
 
         self.snake_body_sprite["left-down"] = pygame.transform.rotate(self.snake_body_sprite["right-down"], 90)
