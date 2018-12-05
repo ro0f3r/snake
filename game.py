@@ -33,6 +33,7 @@ class Game:
         self.apple = None
         self.snake = None
         self.apple_color = self.RED
+        self.game_pause = False
 
         # initialize pygame stuff
         pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -41,7 +42,10 @@ class Game:
         pygame.display.set_caption("slither.ie")
         self.game_window = pygame.display.set_mode((self.window_width, self.window_height))
         self.game_clock = pygame.time.Clock()
-        self.text_font = pygame.font.SysFont(None, 25)
+        self.small_text_font = pygame.font.SysFont(None, 25)
+        self.medium_text_font = pygame.font.SysFont(None, 35)
+        self.big_text_font = pygame.font.SysFont(None, 45)
+        self.huge_text_font = pygame.font.SysFont(None, 75)
 
         # "initialize" sprites due to readability
         self.apple_sprite = None
@@ -61,6 +65,24 @@ class Game:
         self.draw_screen()
 
         while not self.game_over:
+
+            while self.game_pause:
+                text_surface = self.huge_text_font.render("Pause", True, self.RED)
+                text_rectangle = text_surface.get_rect()
+                text_rectangle.center = ((self.window_width / 2), (self.window_height / 2))
+                self.game_window.blit(text_surface, text_rectangle)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            self.game_pause = False
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        quit()
+
+                pygame.display.update()
+                self.game_clock.tick(self.fps)
+
             # process events
             self.process_events(pygame.event.get())
 
@@ -130,9 +152,9 @@ class Game:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.type == pygame.QUIT:
-                    self.game_over = True
+                    self.game_pause = True
                 if event.key == pygame.K_ESCAPE:
-                    self.game_over = True
+                    self.game_pause = True
                 # LEFT
                 if event.key == pygame.K_LEFT:
                     self.snake.head.set_direction("left")
@@ -211,13 +233,13 @@ class Game:
 
     def display_player_score(self):
         score_string = "Score: " + str(self.player_score)
-        text_surface = self.text_font.render(score_string, True, self.WHITE)
+        text_surface = self.small_text_font.render(score_string, True, self.WHITE)
         # text_surface.get_rect().center = (self.window_width / 2), 10
         self.game_window.blit(text_surface, (10, 20))
 
     def display_player_name(self):
         name_string = "Name: " + str(self.player_name)
-        text_surface = self.text_font.render(name_string, True, self.WHITE)
+        text_surface = self.small_text_font.render(name_string, True, self.WHITE)
         self.game_window.blit(text_surface, (self.window_width - (text_surface.get_width() + 10), 20))
 
 
