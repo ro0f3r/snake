@@ -1,8 +1,10 @@
 import pygame
 import random
+import time
 
 from apple import Apple
 from snake import Snake
+from bird import Bird
 
 
 class Game:
@@ -32,6 +34,7 @@ class Game:
         self.game_over = False
         self.apple = None
         self.snake = None
+        self.enemies = {}
         self.apple_color = self.RED
         self.game_pause = False
 
@@ -49,11 +52,13 @@ class Game:
 
         # "initialize" sprites due to readability
         self.apple_sprite = None
+        self.enemy_sprites = {}
         self.snake_head_sprite = {}
         self.snake_body_sprite = {}
 
         # "initialize" sounds due to readability
         self.snake_eating_sounds = []
+        self.eagle_screech = None
 
         self.start_game()
 
@@ -62,6 +67,7 @@ class Game:
         self.load_sounds()
         self.spawn_player()
         self.spawn_new_apple()
+        self.spawn_enemies()
         self.draw_screen()
 
         while not self.game_over:
@@ -97,6 +103,7 @@ class Game:
             self.draw_screen()
             self.draw_apple()
             self.draw_player()
+            self.draw_enemies()
             self.display_player_score()
             self.display_player_name()
             pygame.display.update()
@@ -109,6 +116,10 @@ class Game:
     def load_sprites(self):
         # initialize apple sprite
         self.apple_sprite = pygame.image.load("sprites/apple.png")
+
+        # initialize enemy sprite
+        self.enemy_sprites["bird_1"] = pygame.image.load("sprites/enemy.png")
+        self.enemy_sprites["bird_2"] = pygame.image.load("sprites/enemy.png")
 
         # initialize all snake head sprites
         self.snake_head_sprite["up"] = pygame.image.load("sprites/snake_head.png")
@@ -137,12 +148,17 @@ class Game:
     def load_sounds(self):
         self.snake_eating_sounds.append(pygame.mixer.Sound("sounds/snake_eating_v1.wav"))
         self.snake_eating_sounds.append(pygame.mixer.Sound("sounds/snake_eating_v2.wav"))
+        self.eagle_screech = pygame.mixer.Sound("sounds/hawk_screech.wav")
 
     def spawn_player(self):
         self.snake = Snake([0, self.playfield_width], [60, self.playfield_height + 60], self.block_size, self.block_size)
 
     def spawn_new_apple(self):
         self.apple = Apple([0, self.playfield_width], [60, self.playfield_height + 60], self.block_size)
+
+    def spawn_enemies(self):
+        self.enemies["bird_1"] = Bird(200, self.playfield_height / 2 + 60, "up", self.block_size, self.block_size, [60, self.playfield_height + 60])
+        self.enemies["bird_2"] = Bird(700, self.playfield_height / 2 + 60, "down", self.block_size, self.block_size, [60, self.playfield_height + 60])
 
     def draw_screen(self):
         self.game_window.fill(self.hud_color)
@@ -175,12 +191,30 @@ class Game:
             self.player_score += 1
             print("{} ate {}".format(str(self.snake), str(self.apple)))
 
+        for enemy in self.enemies:
+            if self.snake.head.collides_with(self.enemies[enemy]):
+                self.game_over = True
+
         for body_part in self.snake.get_body_parts()[1:]:
-            if self.snake.head.get_position() == body_part.get_position():
+            if self.snake.head.collides_with(body_part):
+                self.game_over = True
+            for enemy in self.enemies:
+                if self.enemies[enemy].collides_with(body_part):
+                    pygame.mixer.Sound.play(self.eagle_screech)
+                    time.sleep(1.5)
+                    self.game_over = True
+
+        for enemy in self.enemies:
+            if self.snake.head.collides_with(self.enemies[enemy]):
+                pygame.mixer.Sound.play(self.eagle_screech)
+                time.sleep(1.5)
                 self.game_over = True
 
     def calculate_frame(self):
         self.snake.move()
+
+        for enemy in self.enemies:
+            self.enemies[enemy].move()
 
     def draw_apple(self):
         self.game_window.blit(self.apple_sprite, self.apple.get_position_thickness_thickness())
@@ -230,6 +264,10 @@ class Game:
                         self.game_window.blit(self.snake_body_sprite["right"], self.snake.body_parts[i + 1].get_position())
             except IndexError:
                 pass
+
+    def draw_enemies(self):
+        for enemy in self.enemies:
+            self.game_window.blit(self.enemy_sprites[enemy], self.enemies[enemy].get_position())
 
     def display_player_score(self):
         score_string = "Score: " + str(self.player_score)
